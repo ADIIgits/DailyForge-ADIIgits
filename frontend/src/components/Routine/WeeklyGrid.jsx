@@ -1,5 +1,5 @@
 import { useDroppable } from "@dnd-kit/core";
-import { X } from "lucide-react";
+import { X, RotateCcw } from "lucide-react";
 
 /* ---------------- Constants ---------------- */
 const DAYS = [
@@ -78,10 +78,25 @@ function DroppableCell({ day, time, tasks, onRemoveTask }) {
 }
 
 /* ---------------- Weekly Grid ---------------- */
-export default function WeeklyGrid({ scheduledTasks, onSaveDay, onRemoveTask }) {
+export default function WeeklyGrid({
+  scheduledTasks,
+  onSaveDay,
+  onRemoveTask,
+  onClearDay,
+  onClearWeek,
+}) {
   return (
-    <div className="card card-primary overflow-x-auto animate-in">
-      <h2 className="text-lg font-semibold text-main mb-4">Weekly Schedule</h2>
+    <div className="card card-primary overflow-x-auto animate-in relative">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold text-main">Weekly Schedule</h2>
+        <button
+          onClick={onClearWeek}
+          className="p-2 rounded-full text-[#66A5AD] hover:bg-[#66A5AD]/30 transition-colors cursor-pointer"
+          title="Clear whole week"
+        >
+          <RotateCcw size={20} />
+        </button>
+      </div>
 
       <div
         className="grid"
@@ -92,12 +107,19 @@ export default function WeeklyGrid({ scheduledTasks, onSaveDay, onRemoveTask }) 
         {/* ===== Save Buttons Row ===== */}
         <div /> {/* empty time column */}
         {DAYS.map((day) => (
-          <div key={`save-${day}`} className="flex justify-center pb-2">
+          <div key={`save-${day}`} className="flex justify-center items-center gap-2 pb-2">
             <button
               onClick={() => onSaveDay(day)}
               className="btn btn-primary px-3 py-1 text-xs cursor-pointer hover-lift"
             >
               Save
+            </button>
+            <button
+              onClick={() => onClearDay(day)}
+              className="p-1 rounded-full text-[#66A5AD] hover:bg-[#66A5AD]/30 transition-colors cursor-pointer"
+              title={`Clear ${day}`}
+            >
+              <RotateCcw size={14} />
             </button>
           </div>
         ))}

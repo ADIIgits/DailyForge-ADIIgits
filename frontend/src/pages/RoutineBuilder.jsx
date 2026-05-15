@@ -128,6 +128,16 @@ export default function RoutineBuilder() {
     );
   };
 
+  //for clearing a day's tasks from the weekly grid
+  const clearDayTasks = (day) => {
+    setScheduledTasks((prev) => prev.filter((t) => t.day !== day));
+  };
+
+  //for clearing all days's tasks from the weekly grid
+  const clearWeekTasks = () => {
+    setScheduledTasks([]);
+  };
+
   return (
     <DndContext onDragEnd={handleDragEnd}>
       <div className="app-bg min-h-screen px-6 py-8 animate-in">
@@ -159,6 +169,8 @@ export default function RoutineBuilder() {
               scheduledTasks={scheduledTasks}
               onSaveDay={openSaveRoutineModal}
               onRemoveTask={removeScheduledTask}
+              onClearDay={clearDayTasks}
+              onClearWeek={clearWeekTasks}
             />
           </section>
         </div>
