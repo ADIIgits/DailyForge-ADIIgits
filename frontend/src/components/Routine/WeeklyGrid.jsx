@@ -1,4 +1,5 @@
 import { useDroppable } from "@dnd-kit/core";
+import { X } from "lucide-react";
 
 /* ---------------- Constants ---------------- */
 const DAYS = [
@@ -31,7 +32,7 @@ const timeToMinutes = (time) => {
 };
 
 /* ---------------- Droppable Cell ---------------- */
-function DroppableCell({ day, time, tasks }) {
+function DroppableCell({ day, time, tasks, onRemoveTask }) {
   const { setNodeRef, isOver } = useDroppable({
     id: `${day}-${time}`,
     data: {
@@ -51,10 +52,25 @@ function DroppableCell({ day, time, tasks }) {
         <div
           key={task.taskId}
           className="absolute inset-1 rounded-lg bg-blue-500
-                     text-white text-xs font-medium
+                     text-white text-[10px] sm:text-xs font-medium
                      flex items-center justify-center shadow animate-in"
         >
-          {task.title}
+          <span className="truncate px-1">{task.title}</span>
+
+          {/* Show cross icon only if task is not saved */}
+          {!task.isSaved && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemoveTask(task.taskId, day, task.startTime);
+              }}
+              className="absolute top-0.5 right-0.5 bg-white/20 hover:bg-white/40 
+                         rounded-full p-0.5 transition-colors cursor-pointer"
+              title="Remove task"
+            >
+              <X size={10} />
+            </button>
+          )}
         </div>
       ))}
     </div>
@@ -62,7 +78,7 @@ function DroppableCell({ day, time, tasks }) {
 }
 
 /* ---------------- Weekly Grid ---------------- */
-export default function WeeklyGrid({ scheduledTasks, onSaveDay }) {
+export default function WeeklyGrid({ scheduledTasks, onSaveDay, onRemoveTask }) {
   return (
     <div className="card card-primary overflow-x-auto animate-in">
       <h2 className="text-lg font-semibold text-main mb-4">Weekly Schedule</h2>
@@ -109,6 +125,7 @@ export default function WeeklyGrid({ scheduledTasks, onSaveDay }) {
                 key={`${day}-${time}`}
                 day={day}
                 time={time}
+                onRemoveTask={onRemoveTask}
                 tasks={scheduledTasks.filter(
                   (t) => t.day === day && t.startTime === timeToMinutes(time)
                 )}

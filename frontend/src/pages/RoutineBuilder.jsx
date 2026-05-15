@@ -67,6 +67,12 @@ export default function RoutineBuilder() {
 
       setIsSaveModalOpen(false);
       setRoutineName("");
+
+      // Mark all tasks for this day as saved in the UI
+      setScheduledTasks((prev) =>
+        prev.map((t) => (t.day === selectedDay ? { ...t, isSaved: true } : t))
+      );
+
       setSelectedDay(null);
 
       alert("Routine saved successfully");
@@ -99,6 +105,7 @@ export default function RoutineBuilder() {
     const { day, startTime } = over.data.current;
 
     setScheduledTasks((prev) => [
+      // Filter out if the same task already exists on this day
       ...prev.filter((t) => !(t.taskId === task._id && t.day === day)),
       {
         taskId: task._id,
@@ -106,8 +113,19 @@ export default function RoutineBuilder() {
         day,
         startTime,
         duration: 60,
+        isSaved: false, // Mark as not saved initially
       },
     ]);
+  };
+
+                              //string, string, number btw
+  const removeScheduledTask = (taskId, day, startTime) => {
+    setScheduledTasks((prev) =>
+      prev.filter( 
+        (t) =>
+          !(t.taskId === taskId && t.day === day && t.startTime === startTime)
+      )
+    );
   };
 
   return (
@@ -140,6 +158,7 @@ export default function RoutineBuilder() {
             <WeeklyGrid
               scheduledTasks={scheduledTasks}
               onSaveDay={openSaveRoutineModal}
+              onRemoveTask={removeScheduledTask}
             />
           </section>
         </div>
