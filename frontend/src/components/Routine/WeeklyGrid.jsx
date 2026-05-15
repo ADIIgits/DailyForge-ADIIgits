@@ -52,7 +52,7 @@ function DroppableCell({ day, time, tasks, onRemoveTask }) {
         <div
           key={task.taskId}
           className="absolute inset-1 rounded-lg bg-blue-500
-                     text-white text-[10px] sm:text-xs font-medium
+                     text-white text-xs font-medium
                      flex items-center justify-center shadow animate-in"
         >
           <span className="truncate px-1">{task.title}</span>
