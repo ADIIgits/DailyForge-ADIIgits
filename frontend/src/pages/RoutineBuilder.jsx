@@ -112,6 +112,10 @@ export default function RoutineBuilder() {
   };
 
   /* ---------------- DRAG END HANDLER ---------------- */
+
+  
+
+
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (!over) return;
@@ -134,6 +138,7 @@ export default function RoutineBuilder() {
     ]);
   };
 
+  // Removing Schedule task after drag
                               //string, string, number btw
   const removeScheduledTask = (taskId, day, startTime) => {
     setScheduledTasks((prev) =>
@@ -184,7 +189,7 @@ export default function RoutineBuilder() {
             <WeeklyGrid
               scheduledTasks={scheduledTasks}
               onSaveDay={openSaveRoutineModal}
-              onRemoveTask={removeScheduledTask}
+              onDeleteTask={removeScheduledTask}
               onClearDay={clearDayTasks}
               onClearWeek={clearWeekTasks}
             />
@@ -284,7 +289,7 @@ export default function RoutineBuilder() {
               value={routineName}
               onChange={(e) => setRoutineName(e.target.value)}
               placeholder="Routine name"
-              className="w-full mb-4 rounded-xl border-soft px-3 py-2 text-sm focus:outline-none"
+              className="w-full mb-4 rounded-xl border-soft px-3 py-2 text-sm focus:outline-none bg-transparent text-main"
             />
 
             <textarea
@@ -292,7 +297,7 @@ export default function RoutineBuilder() {
               onChange={(e)=> setDescription(e.target.value)}
               placeholder="Add a description (optional)"
               rows="3"
-              className="w-full mb-4 rounded-lg border-soft px-3 py-2 text-sm focus:ring-primary bg-white resize-none"
+              className="w-full mb-4 rounded-lg border-soft px-3 py-2 text-sm focus:ring-primary bg-transparent text-main resize-none"
             />
 
             <div className="flex justify-end gap-3">

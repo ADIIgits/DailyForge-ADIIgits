@@ -32,12 +32,12 @@ const timeToMinutes = (time) => {
 };
 
 /* ---------------- Droppable Cell ---------------- */
-function DroppableCell({ day, time, tasks, onRemoveTask }) {
+function DroppableCell({ day, time, tasks, onDeleteTask }) {
   const { setNodeRef, isOver } = useDroppable({
     id: `${day}-${time}`,
     data: {
       day,
-      startTime: timeToMinutes(time),
+      startTime: timeToMinutes(time), 
     },
   });
 
@@ -45,7 +45,7 @@ function DroppableCell({ day, time, tasks, onRemoveTask }) {
     <div
       ref={setNodeRef}
       className={`border-soft h-12 relative transition ${
-        isOver ? "bg-blue-100" : "bg-white/70"
+        isOver ? "bg-blue-100 dark:bg-blue-900/30" : "bg-white/70 dark:bg-slate-800/30"
       }`}
       role="region"
       aria-label={`${day} at ${time} - Drop zone for scheduling tasks`}
@@ -57,22 +57,21 @@ function DroppableCell({ day, time, tasks, onRemoveTask }) {
                      text-white text-xs font-medium
                      flex items-center justify-center shadow animate-in"
         >
-          <span className="truncate px-1">{task.title}</span>
+                  <span className="truncate px-1">{task.title}</span>
 
-          {/* Show cross icon only if task is not saved */}
-          {!task.isSaved && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onRemoveTask(task.taskId, day, task.startTime);
-              }}
-              className="absolute top-0.5 right-0.5 bg-white/20 hover:bg-white/40 
-                         rounded-full p-0.5 transition-colors cursor-pointer"
-              title="Remove task"
-            >
-              <X size={10} />
-            </button>
-          )}
+                    {!task.isSaved && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDeleteTask(task.taskId, day, task.startTime);
+                      }}
+                      className="absolute top-0.5 right-0.5 bg-white/20 hover:bg-white/40 
+                                 rounded-full p-0.5 transition-colors cursor-pointer"
+                      title="Remove task"
+                    >
+                      <X size={10} />
+                    </button>
+                  )}
         </div>
       ))}
     </div>
@@ -83,7 +82,7 @@ function DroppableCell({ day, time, tasks, onRemoveTask }) {
 export default function WeeklyGrid({
   scheduledTasks,
   onSaveDay,
-  onRemoveTask,
+  onDeleteTask,
   onClearDay,
   onClearWeek,
 }) {
@@ -149,10 +148,11 @@ export default function WeeklyGrid({
                 key={`${day}-${time}`}
                 day={day}
                 time={time}
-                onRemoveTask={onRemoveTask}
+             
                 tasks={scheduledTasks.filter(
                   (t) => t.day === day && t.startTime === timeToMinutes(time)
                 )}
+                onDeleteTask={onDeleteTask}
               />
             ))}
           </div>
